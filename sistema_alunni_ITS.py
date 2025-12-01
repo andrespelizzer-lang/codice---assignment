@@ -7,8 +7,9 @@ lista=[]
 listacomp=[]
 lista_compiti=[]
 listamatricole=[]
-votomax=None
-votomin=None
+stanc=[]
+listaassegnati=[]
+listacu=[]
 print("╔══════════════════════════════════════╗")
 print("║ SISTEMA DI TRACCIAMENTO ALUNNI - ITS ║")
 print("╚══════════════════════════════════════╝")
@@ -48,12 +49,12 @@ while True:
        
     elif nummatricola<100:
         print(f"MAT0{nummatricola}")
-        numero=(f"MAT00{nummatricola}")
+        numero=(f"MAT0{nummatricola}")
         listamatricole.append(numero)
         
     else:
         print(f"MAT{nummatricola}")
-        numero=(f"MAT00{nummatricola}")
+        numero=(f"MAT{nummatricola}")
         listamatricole.append(numero)
         
     print(f"Alunno {nome.capitalize()} {cognome.capitalize()} inserito con successo! ✅")
@@ -71,7 +72,7 @@ while True:
     }}
     lista.append(lista_alunni)
     with open("lista.json","w")as file:
-      json.dump(lista,file,indent=4)
+      json.dump(lista_alunni,file,indent=4)
     
 
   elif scelta=="b":
@@ -84,9 +85,8 @@ while True:
             pass
    else:
 
-    with open("lista.json","r")as file:
-      lettura=json.load(file)
-      for elementi in lettura:
+    
+      for elementi in lista:
          for chiave_esterna, dizionario_interno in elementi.items():
           print(f"--- {chiave_esterna} ---")
           for chiave_interna, valore_interno in dizionario_interno.items():
@@ -104,8 +104,12 @@ while True:
      datomodifica=input("Che dato vorresti modificare?").lower()
      modifica=input("inserisci modifica")
      lista_alunni[numero][datomodifica]=modifica
-     oramodifica=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+     oramodific=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+     lista_alunni[numero]["data_modifica"]=oramodific
      print(f"Il dato dell'alunno con la matricola {numero} è stato modificato! ⚙️ ")
+     with open("lista.json","w")as file:
+       file.write("\n")
+       json.dump(lista_alunni,file,indent=4)
 
   elif scelta=="d":
     if lista==[]:
@@ -118,6 +122,9 @@ while True:
       numero=input("inserisci la matricola dell'alunno che vorresti eliminare")
       del lista_alunni[numero]
       print(f"L'alunno con la matricola {numero} è stato eliminato! 🗙")
+      with open("lista.json","w")as file:
+       file.write("\n")
+       json.dump(lista_alunni,file,indent=4)
 
   elif scelta=="e":
     if lista==[]:
@@ -133,11 +140,11 @@ while True:
        
     elif numerotask<100:
         
-        task=(f"TASK00{numerotask}")
+        task=(f"TASK0{numerotask}")
         
     else:
         
-        task=(f"TASK00{numerotask}")
+        task=(f"TASK{numerotask}")
 
     while True:
         compitoalunno=input("scegli l'alunno a cui assegnare il compito:(inserire matricola alunno) ")
@@ -154,14 +161,32 @@ while True:
     
 
     while True:
-      voto=int(input("inserire voto"))
+      voto=float(input("inserire voto"))
       if voto<0 or voto>10:
        raise ValueError("il voto deve essere compreso tra 0 e 10")
       else:
         break
+      
+    listastatistiche={
+       compitoalunno:{
+          "voto":str(voto)
+       }
+    }
+    stanc.append(listastatistiche)
+    
+
+    compitiassegnati={
+      compitoalunno:{
+        " compiti assegnati":1
+        
+      }
+    }
+    listaassegnati.append(compitiassegnati)
+
+
 
     lista_compiti = {
-    task: {
+        task: {
         "id": task,
         "descrizione": descrizione,
         "alunno_matricola": compitoalunno,
@@ -172,6 +197,13 @@ while True:
     }
     print("Compito assegnato correttamente! ✅")
     listacomp.append(lista_compiti)
+    with open("lista.json","a")as file:
+       file.write("\n")
+       json.dump(lista_compiti,file,indent=4)
+
+    
+    
+    
 
   elif scelta=="f":
      if lista==[]:
@@ -187,6 +219,13 @@ while True:
       print("╚══════════════════════╝")
       lista_compiti[task]["stato"]="completato"
       lista_compiti[task]["voto"]="registrato"
+      compiticompletati={
+       compitoalunno:{
+              "compiti completati":1
+       }
+      }
+      listacu.append(compiticompletati)
+      listastatistiche[compitoalunno]["voto"]=float(voto)
       for chiave_esterna, dizionario_interno in lista_compiti.items():
         print(f"--- {chiave_esterna} ---")
         for chiave_interna, valore_interno in dizionario_interno.items():
@@ -203,7 +242,8 @@ while True:
      print("╔═══════════════════════════════════╗")
      print("║ VISUALIZZA COMPITI DEGLI STUDENTI ║")
      print("╚═══════════════════════════════════╝")
-     lista_compiti[task]["voto"]=int(voto)
+     lista_compiti[task]["voto"]=float(voto)
+
 
      for elementi in listacomp:
         for chiave_esterna, dizionario_interno in elementi.items():
@@ -222,8 +262,95 @@ while True:
         print("╚═══════════════════════════════╝")
 
         while True:
-         statistichealunno=input("scegli l'alunno a cui visualizzare le statistiche :(inserire matricola alunno) ")
-         if statistichealunno not in listamatricole:
-            print("Matricola alunno non esistente! 🚨")
-         else:
-            break
+              matricolo=input("inserisci matricola dell'alunno a cui vuoi visualizzare le statistiche")
+              if matricolo not in listamatricole:
+                     print("Matricola alunno non esistente! 🚨")
+              else:
+                     break
+
+              
+
+     
+        listav=[]
+        for elementa in stanc:
+          for chiave_esterno, dizionario_interna in elementa.items():
+        
+            if chiave_esterno==matricolo:
+            
+            
+             for chiave_interno, valore_interna in dizionario_interna.items():
+            
+              listav.append(valore_interna)
+        if listastatistiche[compitoalunno]["voto"]!=float(voto):
+              media="non esistente"
+              massimo="non esistente"
+              minimo= "non esistente"
+              listav="non esistente"
+
+        else:
+          somma=sum(listav)
+          lunghezza=len(listav)
+          media=somma/lunghezza
+          massimo=max(listav)
+          minimo=min(listav)
+          
+        
+
+        print(f"--- {matricolo} --- ")
+        print(f"Media:{media}")
+
+
+        
+        listac=[]
+        
+        for elementi in listaassegnati:
+          for chiaveesterna,dizionariointerno in elementi.items():
+              if chiaveesterna==matricolo:
+                     for chiaveinterna,valoreinterno in dizionariointerno.items():
+                            
+                            listac.append(valoreinterno)
+        sommac=sum(listac)
+        print(f"Numero compiti assegnati:{sommac}")
+        listaval=[]
+        for elementi in listacu:
+              for chiaveesterna,dizionariointerno in elementi.items():
+               if chiaveesterna==matricolo:
+                     for chiaveinterna,valoreinterno in dizionariointerno.items():
+                            
+                            listaval.append(valoreinterno)
+        sommaval=sum(listaval)
+        print(f"Numero compiti completati:{sommaval}")
+        
+        print(f"Massimo voto:{massimo}")
+        print(f"Minimo:{minimo}")
+        n=0
+        print("Progressione voti nel tempo:")
+        if listav=="non esistente":
+              print("non esistente")
+        else:
+
+         for elementi in listav:
+          n=n+1
+          print(f"voto {n}:{elementi}")
+
+  elif scelta=="i":
+       if lista==[]:
+        print("Non sono presenti studenti a cui visualizzare le statistiche dei compiti ! Ridigitare comando! 🛑")
+       elif lista_compiti==[]:
+        print("Non sono presenti compiti di studenti. Ridigitare comando🛑")
+       else:
+        print("╔═══════════════════════════════╗")
+        print("║ RANKING ALUNNI PER MEDIA VOTI ║")
+        print("╚═══════════════════════════════╝")
+        print(stanc)
+        
+
+
+       
+       
+
+
+
+
+  elif scelta=="n":
+       break

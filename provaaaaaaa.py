@@ -423,14 +423,5 @@ while True:
                     print(f"{valoree_esternoo}:{valore_internoo}")
 
   elif scelta=="k":
+            
         
-
-
-       
-       
-
-
-
-
-  elif scelta=="n":
-       break

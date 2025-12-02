@@ -9,8 +9,6 @@ lista_compiti=[]
 listamatricole=[]
 stanc=[]
 listaassegnati=[]
-listacc=[]
-
 listacu=[]
 print("╔══════════════════════════════════════╗")
 print("║ SISTEMA DI TRACCIAMENTO ALUNNI - ITS ║")
@@ -191,9 +189,6 @@ while True:
     }
     listaassegnati.append(compitiassegnati)
 
-    
-    
-
 
 
     lista_compiti = {
@@ -206,7 +201,6 @@ while True:
         "voto": voto
     }
     }
-    listacc.append(lista_compiti)
     print("Compito assegnato correttamente! ✅")
     listacomp.append(lista_compiti)
     with open("lista.json","a")as file:
@@ -367,7 +361,7 @@ while True:
         print("╔═══════════════════════════════╗")
         print("║ RANKING ALUNNI PER MEDIA VOTI ║")
         print("╚═══════════════════════════════╝")
-        print(stanc)
+        
         listadiz=[]
         diz={}
 
@@ -411,26 +405,29 @@ while True:
         print("╔═══════════════════════════════╗")
         print("║ REPORT COMPITI NON COMPLETATI ║")
         print("╚═══════════════════════════════╝")
-        if not lista_compiti[task]["stato"]=="completato":
-            
-           
-            
-            for elementoo in listacc:
-            
-            
-             for chiavee_esternaa, chiavee_internaa in elementoo.items():
-                for valoree_esternoo,valore_internoo in chiavee_internaa.items():
-                    print(f"{valoree_esternoo}:{valore_internoo}")
+        for elementi in listamatricole:
+     
 
-  elif scelta=="k":
+     
+             for elementa in listaassegnati:
+          
+               for chiave_esterno, dizionario_interna in elementa.items():
+                 if chiave_esterno==elementi:
+                
+                  for chiave_interno, valore_interna in dizionario_interna.items():
+
+                   print(f"---{elementi}---")
+
+                  
+                  
+                   print(f"{chiave_interno} : {valore_interna}")
+    
+     
+             
+
         
 
-
-       
-       
-
-
-
+     
 
   elif scelta=="n":
-       break
+    break

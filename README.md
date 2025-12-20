@@ -63,6 +63,7 @@ Matricola (premere invio per generare):
 - Le matricole vengono generate automaticamente in formato `MAT001`, `MAT002`, ecc.
 - I voti devono essere compresi tra 0 e 10
 - I dati vengono salvati automaticamente dopo ogni operazione
+- Andando a eliminare un alunno non si perdono le task di esso per mantenere lo storico completo
 
 # Crediti
 Progetto sviluppato per l'assignment ITS (Novembre 2025).
